@@ -1,0 +1,5 @@
+# El backend del formulario no se publica: no es parte del sitio.
+# GitHub Pages sirve archivos, no ejecuta formularios; el programa que
+# recibe las solicitudes vive en Google Apps Script.
+# Ver README.md, sección 4.
+backend/

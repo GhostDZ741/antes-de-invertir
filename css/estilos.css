@@ -1,0 +1,736 @@
+/* ============================================================
+   ARAB LION MARKETING — landing del Bonus 3
+   ------------------------------------------------------------
+   Una sola hoja, sin frameworks. La tipografía es la del libro
+   (Playfair Display + Source Sans 3), servida desde el propio
+   sitio: la landing se lee con la misma voz que el ebook.
+
+   Orden:
+     01 · Fuentes
+     02 · Tokens
+     03 · Base
+     04 · Piezas reutilizables
+     05 · Cabecera y portada
+     06 · Franjas de contenido
+     07 · Formulario
+     08 · Pie
+     09 · Movimiento y foco
+   ============================================================ */
+
+
+/* ---------- 01 · FUENTES ---------- */
+
+@font-face{
+  font-family:"Playfair Display";font-style:normal;font-weight:700;
+  src:url("../assets/fuentes/playfair-700.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Playfair Display";font-style:normal;font-weight:900;
+  src:url("../assets/fuentes/playfair-900.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Playfair Display";font-style:italic;font-weight:400;
+  src:url("../assets/fuentes/playfair-italic-400.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Source Sans 3";font-style:normal;font-weight:400;
+  src:url("../assets/fuentes/sourcesans-400.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Source Sans 3";font-style:normal;font-weight:600;
+  src:url("../assets/fuentes/sourcesans-600.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Source Sans 3";font-style:normal;font-weight:700;
+  src:url("../assets/fuentes/sourcesans-700.woff2") format("woff2");
+  font-display:swap;
+}
+
+
+/* ---------- 02 · TOKENS ---------- */
+
+:root{
+  /* Los mismos de la portada del libro. */
+  --negro:      #0D0D0D;
+  --negro-alto: #131210;
+  --negro-bajo: #1B1915;
+  --oro:        #BD9E44;
+  --oro-claro:  #D9C27E;
+  --oro-osc:    #8F7529;   /* el dorado que sí se lee sobre papel */
+  --papel:      #FAF9F7;
+  --papel-hueso:#F2F0EB;
+  --tinta:      #3E3C36;
+  --tinta-suave:#6B675F;
+  --sobre-osc:  #C2BEB7;   /* texto corrido sobre negro */
+
+  --linea-osc:  rgba(255,255,255,.11);
+  --linea-clara:#E3E0D9;
+
+  --display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --texto:   "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* El ancho de lectura. `--ancho` es el contenedor; `--lectura`,
+     la columna donde el ojo no se pierde. */
+  --ancho:  1120px;
+  --lectura: 62ch;
+
+  --raro: 8px;             /* redondeo, deliberadamente escaso */
+  --curva: cubic-bezier(.22,.61,.36,1);
+}
+
+
+/* ---------- 03 · BASE ---------- */
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+
+body{
+  margin:0;
+  background:var(--negro);
+  color:var(--sobre-osc);
+  font-family:var(--texto);
+  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+  line-height:1.62;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+h1,h2,h3{
+  font-family:var(--display);
+  font-weight:700;
+  line-height:1.12;
+  letter-spacing:-.01em;
+  margin:0 0 .7em;
+  color:var(--papel);
+  text-wrap:balance;
+}
+
+h1{ font-size:clamp(2.45rem,1.5rem + 5.2vw,4.9rem); }
+h2{ font-size:clamp(1.7rem,1.15rem + 2.4vw,2.9rem); }
+h3{ font-size:clamp(1.15rem,1.02rem + .6vw,1.5rem); }
+
+h1 em,h2 em{
+  font-style:italic;
+  font-weight:400;
+  color:var(--oro);
+}
+
+p{margin:0 0 1.1em;max-width:var(--lectura)}
+
+a{color:var(--oro-claro);text-decoration-thickness:1px;text-underline-offset:.18em}
+a:hover{color:var(--papel)}
+
+img{max-width:100%;height:auto;display:block}
+
+/* `hidden` tiene que ganarle a cualquier display que ponga una clase.
+   Sin esta regla, un bloque oculto con display:flex o display:grid se
+   sigue viendo: la hoja del navegador pierde contra la del sitio. */
+[hidden]{display:none !important}
+
+::selection{background:var(--oro);color:var(--negro)}
+
+/* Un solo contenedor para todo: el ancho y el aire lateral viven acá. */
+.ancho{
+  width:100%;
+  max-width:var(--ancho);
+  margin-inline:auto;
+  padding-inline:clamp(1.25rem,5vw,3rem);
+}
+.ancho.angosto{max-width:820px}
+.ancho.centrado{text-align:center}
+/* El texto centrado se lee mal si la línea es larga: se acorta más que
+   el texto a la izquierda, que puede estirarse. */
+.ancho.centrado p{margin-inline:auto;max-width:50ch}
+
+/* Quien navega con teclado tiene que poder saltear la cabecera. */
+.saltar{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--oro);color:var(--negro);
+  padding:.7rem 1.1rem;font-weight:700;border-radius:var(--raro);
+}
+.saltar:focus{left:1rem;top:1rem}
+
+
+/* ---------- 04 · PIEZAS REUTILIZABLES ---------- */
+
+.etiqueta-oro{
+  display:flex;align-items:center;gap:.8rem;
+  font-size:.76rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--oro-claro);
+  margin:0 0 1.6rem;
+}
+.etiqueta-oro.osc{color:var(--oro-osc)}
+
+/* El filete corto que antecede al rótulo, como en el interior del libro. */
+.filete{
+  display:block;width:34px;height:2px;flex:none;
+  background:currentColor;opacity:.85;
+}
+
+.boton{
+  display:inline-block;
+  background:var(--oro);
+  color:var(--negro);
+  font-family:var(--texto);
+  font-size:.94rem;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:1.05rem 2.3rem;
+  border:none;border-radius:var(--raro);
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .25s var(--curva),transform .25s var(--curva),
+             box-shadow .25s var(--curva);
+}
+.boton:hover{
+  background:var(--oro-claro);
+  color:var(--negro);
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px -12px rgba(189,158,68,.6);
+}
+.boton:active{transform:translateY(0)}
+
+.boton-claro{
+  background:transparent;color:var(--tinta);
+  box-shadow:inset 0 0 0 1px var(--linea-clara);
+}
+.boton-claro:hover{
+  background:var(--tinta);color:var(--papel);
+  box-shadow:none;
+}
+
+.boton-ancho{width:100%;padding:1.15rem 2rem}
+
+
+/* ---------- 05 · CABECERA Y PORTADA ---------- */
+
+.cabecera{
+  position:relative;z-index:3;
+  border-bottom:1px solid var(--linea-osc);
+  padding-block:1.5rem;
+  background:var(--negro);
+}
+.cabecera-fila{
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:.9rem 1.5rem;
+}
+.marca{width:clamp(104px,15vw,126px);height:auto}
+
+.sello{
+  margin:0;
+  font-size:.7rem;font-weight:700;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--oro-claro);
+}
+
+.hero{
+  position:relative;
+  padding-block:clamp(4rem,11vw,8.5rem) clamp(4rem,9vw,7rem);
+  overflow:hidden;
+  /* El resplandor dorado de la portada del libro. */
+  background:
+    radial-gradient(58% 42% at 22% 0%,
+      rgba(189,158,68,.20) 0%, rgba(189,158,68,0) 68%),
+    var(--negro);
+}
+/* La trama de líneas de la portada, apenas insinuada. */
+.halo{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(
+    104deg, rgba(189,158,68,.055) 0 1px, transparent 1px 15px);
+  mask-image:radial-gradient(70% 60% at 30% 10%, #000 0%, transparent 78%);
+  -webkit-mask-image:radial-gradient(70% 60% at 30% 10%, #000 0%, transparent 78%);
+}
+.hero-cuerpo{position:relative;z-index:1}
+
+.bajada{
+  font-size:clamp(1.08rem,1rem + .45vw,1.35rem);
+  color:#D3CFC8;
+  max-width:46ch;
+}
+
+.consigna{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:clamp(1.1rem,1rem + .6vw,1.5rem);
+  color:var(--oro-claro);
+  max-width:34ch;
+  padding-left:1.1rem;
+  border-left:2px solid var(--oro);
+  margin-block:2rem 2.6rem;
+}
+
+.accion{margin-block:2.2rem 0}
+
+/* Los cuatro datos del formato, como una ficha técnica. */
+.datos{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.5rem 1.2rem;
+  margin:clamp(3rem,6vw,4.4rem) 0 0;
+  padding-top:2rem;
+  border-top:1px solid var(--linea-osc);
+  max-width:760px;
+}
+.datos dt{
+  font-size:.7rem;font-weight:700;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--oro);
+  margin-bottom:.35rem;
+}
+.datos dd{
+  margin:0;font-size:1.02rem;font-weight:600;color:var(--papel);
+}
+
+
+/* ---------- 06 · FRANJAS DE CONTENIDO ---------- */
+
+.franja{padding-block:clamp(3.6rem,9vw,7rem)}
+
+/* Una franja clara cada tanto: le da aire al recorrido y separa
+   el diagnóstico de la solicitud. */
+.franja.clara{background:var(--papel);color:var(--tinta)}
+.franja.clara h2,.franja.clara h3{color:var(--negro)}
+/* Los enlaces del texto corrido van en dorado oscuro sobre papel, porque
+   el dorado de marca no llega al contraste mínimo para leer. Los botones
+   quedan afuera: cada uno trae su propio par de colores, y si heredaran
+   este se perderían sobre su fondo. */
+.franja.clara a:not(.boton){color:var(--oro-osc)}
+.franja.clara a:not(.boton):hover{color:var(--negro)}
+.franja.clara .declaracion em{color:var(--oro-osc)}
+/* Mismo motivo: la etiqueta que abre el selector de archivos es un botón
+   negro, y sin esto el color de la franja la dejaría ilegible. */
+.franja.clara .boton-archivo{color:var(--papel)}
+
+.declaracion{
+  font-size:clamp(1.6rem,1.15rem + 2.1vw,2.7rem);
+  line-height:1.2;
+}
+
+.entrada{
+  font-size:1.05rem;
+  color:var(--tinta-suave);
+  max-width:56ch;
+}
+.franja:not(.clara) .entrada{color:#A5A19A}
+
+/* --- los cinco puntos del análisis --- */
+
+.analisis{
+  list-style:none;margin:clamp(2.4rem,5vw,3.6rem) 0 0;padding:0;
+  display:grid;gap:0;
+  counter-reset:none;
+}
+.analisis li{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.4rem 1.4rem;
+  padding-block:1.7rem;
+  border-top:1px solid var(--linea-clara);
+}
+.analisis li:last-child{border-bottom:1px solid var(--linea-clara)}
+.analisis .num{
+  font-family:var(--display);
+  font-size:clamp(1.5rem,1.2rem + 1vw,2.1rem);
+  font-weight:700;line-height:1;
+  color:var(--oro);             /* número grande, decorativo: el dorado alcanza */
+  grid-row:span 2;
+  min-width:2.6ch;
+}
+.analisis h3{margin:0 0 .25rem;grid-column:2}
+.analisis p{margin:0;grid-column:2;color:var(--tinta-suave);max-width:60ch}
+
+/* --- las siete certezas --- */
+
+.claridad{
+  list-style:none;margin:clamp(2.2rem,4.5vw,3rem) 0 0;padding:0;
+  display:grid;gap:.15rem;
+  max-width:760px;
+}
+.claridad li{
+  display:flex;align-items:baseline;gap:1.1rem;
+  padding-block:.85rem;
+  border-bottom:1px solid var(--linea-osc);
+  font-size:1.06rem;color:var(--papel);
+}
+.claridad .n{
+  flex:none;
+  font-family:var(--display);font-weight:700;font-size:1rem;
+  color:var(--oro);min-width:1.4ch;text-align:right;
+}
+
+.pie-lista{
+  margin-top:2.2rem;
+  font-size:.98rem;color:#9A968F;max-width:66ch;
+}
+
+/* --- la lista de tildes --- */
+
+.tildes{
+  list-style:none;margin:clamp(2rem,4vw,2.8rem) 0 0;padding:0;
+  display:grid;gap:1.05rem;
+}
+.tildes li{
+  position:relative;
+  padding-left:2rem;
+  font-size:1.06rem;
+}
+.tildes li::before{
+  content:"";
+  position:absolute;left:0;top:.62em;
+  width:.85rem;height:.85rem;
+  border-left:2px solid var(--oro-osc);
+  border-bottom:2px solid var(--oro-osc);
+  transform:rotate(-45deg) translateY(-.18em);
+}
+
+.nota{
+  margin-top:2.6rem;padding-top:1.8rem;
+  border-top:1px solid var(--linea-clara);
+  font-family:var(--display);font-style:italic;
+  font-size:clamp(1.05rem,.98rem + .5vw,1.35rem);
+  color:var(--tinta);
+  max-width:44ch;
+}
+
+/* --- no es una venta --- */
+
+.leon{
+  width:clamp(120px,17vw,168px);height:auto;
+  margin:0 auto 1.8rem;opacity:.9;
+}
+.franja .centrado p{margin-inline:auto;color:#B4B0A9}
+.franja .centrado .declaracion{color:var(--papel)}
+
+
+/* ---------- 07 · FORMULARIO ---------- */
+
+.form-cabeza{margin-bottom:clamp(2.4rem,5vw,3.4rem)}
+.form-cabeza p{max-width:58ch}
+
+.formulario{
+  display:grid;
+  gap:clamp(2.2rem,4vw,3rem);
+  max-width:760px;
+}
+
+.formulario fieldset{
+  margin:0;padding:0;border:none;
+  display:grid;gap:1.6rem;
+}
+.formulario legend{
+  display:flex;align-items:center;gap:.9rem;
+  width:100%;
+  padding:0 0 1.1rem;
+  margin:0 0 1.7rem;
+  border-bottom:1px solid var(--linea-clara);
+  font-family:var(--texto);
+  font-size:.76rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--oro-osc);
+}
+.paso{
+  font-family:var(--display);font-size:1.05rem;
+  letter-spacing:0;color:var(--oro);
+}
+
+.campo{display:grid;gap:.5rem}
+.campo label{
+  font-size:.93rem;font-weight:600;color:var(--negro);
+  letter-spacing:.01em;
+}
+.req{color:var(--oro-osc);font-weight:700}
+
+.campo input[type=text],
+.campo input[type=email],
+.campo input[type=tel],
+.campo textarea{
+  width:100%;
+  font-family:var(--texto);
+  font-size:1rem;             /* 16px: por debajo, iOS hace zoom solo */
+  color:var(--tinta);
+  background:#fff;
+  border:1px solid var(--linea-clara);
+  border-radius:var(--raro);
+  padding:.95rem 1.05rem;
+  transition:border-color .2s var(--curva),box-shadow .2s var(--curva);
+}
+.campo textarea{resize:vertical;min-height:6.5rem;line-height:1.6}
+
+.campo input:hover,.campo textarea:hover{border-color:#CFCAC0}
+
+.campo input:focus,.campo textarea:focus{
+  outline:none;
+  border-color:var(--oro);
+  box-shadow:0 0 0 3px rgba(189,158,68,.22);
+}
+
+/* El campo mal cargado se marca con el borde y con el texto: el color
+   solo no alcanza para quien no lo distingue. */
+.campo input[aria-invalid=true],.campo textarea[aria-invalid=true]{
+  border-color:#A3402F;
+  box-shadow:0 0 0 3px rgba(163,64,47,.14);
+}
+
+.ayuda{margin:0;font-size:.86rem;color:var(--tinta-suave);max-width:56ch}
+.error{
+  margin:0;font-size:.88rem;font-weight:600;color:#8E3626;
+}
+.error::before{content:"⚠ ";font-weight:400}
+
+/* --- subida de fotos --- */
+
+.subida{
+  display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+  padding:1.3rem;
+  background:var(--papel-hueso);
+  border:1px dashed #CFCAC0;
+  border-radius:var(--raro);
+}
+/* El input real queda accesible para el teclado y los lectores de
+   pantalla, pero la pieza visible es su etiqueta. */
+.entrada-archivo{
+  position:absolute;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;
+}
+.entrada-archivo:focus-visible + .boton-archivo{
+  box-shadow:0 0 0 3px rgba(189,158,68,.45);
+}
+.boton-archivo{
+  display:inline-block;flex:none;
+  padding:.8rem 1.5rem;
+  background:var(--negro);color:var(--papel);
+  font-size:.85rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  border-radius:var(--raro);cursor:pointer;
+  transition:background .2s var(--curva);
+}
+.boton-archivo:hover{background:var(--oro);color:var(--negro)}
+
+.archivo-estado{margin:0;font-size:.9rem;color:var(--tinta-suave)}
+
+.lista-fotos{
+  list-style:none;margin:.4rem 0 0;padding:0;display:grid;gap:.5rem;
+}
+.lista-fotos li{
+  display:flex;align-items:center;gap:.85rem;
+  padding:.6rem .8rem;
+  background:#fff;border:1px solid var(--linea-clara);
+  border-radius:var(--raro);font-size:.9rem;
+}
+.lista-fotos img{
+  width:46px;height:46px;flex:none;
+  object-fit:cover;border-radius:4px;background:var(--papel-hueso);
+}
+.lista-fotos .nombre{
+  flex:1 1 auto;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--tinta);
+}
+.lista-fotos .peso{flex:none;color:var(--tinta-suave);font-size:.83rem}
+.lista-fotos button{
+  flex:none;
+  background:none;border:none;cursor:pointer;
+  color:var(--tinta-suave);font-size:1.3rem;line-height:1;
+  padding:.2rem .45rem;border-radius:4px;
+  transition:color .2s var(--curva),background .2s var(--curva);
+}
+.lista-fotos button:hover{color:#8E3626;background:rgba(163,64,47,.08)}
+
+/* --- confirmación y trampa --- */
+
+.casilla{
+  display:flex;align-items:flex-start;gap:.85rem;
+  font-size:.98rem;font-weight:400;color:var(--tinta);
+  cursor:pointer;line-height:1.5;
+}
+.casilla input{
+  flex:none;width:1.25rem;height:1.25rem;margin-top:.2rem;
+  accent-color:var(--oro);cursor:pointer;
+}
+.casilla b{font-weight:700;color:var(--negro)}
+
+.trampa{
+  position:absolute;left:-9999px;
+  width:1px;height:1px;overflow:hidden;
+}
+
+.aviso-prueba{
+  margin:0;
+  padding:1.1rem 1.3rem;
+  background:#FBF4E2;border:1px solid #E4D3A6;
+  border-left:4px solid var(--oro);
+  border-radius:var(--raro);
+  font-size:.93rem;color:#5E4E1C;max-width:none;
+}
+.aviso-prueba code{font-family:ui-monospace,Consolas,monospace;font-size:.9em}
+.aviso-prueba .mono{font-family:ui-monospace,Consolas,monospace;font-size:.9em}
+
+.error-envio{
+  margin:0;padding:1.1rem 1.3rem;
+  background:#FBEAE6;border:1px solid #E8C4BA;
+  border-left:4px solid #A3402F;
+  border-radius:var(--raro);
+  font-size:.95rem;color:#7A2E20;max-width:none;
+}
+
+.letra-chica{
+  margin:0;font-size:.85rem;color:var(--tinta-suave);max-width:60ch;
+}
+
+/* El botón que trabaja: gira el envío. */
+.boton[aria-busy=true]{
+  opacity:.75;cursor:progress;pointer-events:none;
+}
+.boton[aria-busy=true]::after{
+  content:"";
+  display:inline-block;width:.85em;height:.85em;
+  margin-left:.7em;vertical-align:-.08em;
+  border:2px solid rgba(13,13,13,.3);
+  border-top-color:var(--negro);border-radius:50%;
+  animation:girar .7s linear infinite;
+}
+@keyframes girar{to{transform:rotate(360deg)}}
+
+/* --- estado de éxito --- */
+
+.panel-exito{
+  max-width:640px;
+  padding:clamp(2rem,5vw,3.2rem);
+  background:#fff;
+  border:1px solid var(--linea-clara);
+  border-top:3px solid var(--oro);
+  border-radius:var(--raro);
+}
+.panel-exito h3{font-size:clamp(1.5rem,1.2rem + 1.2vw,2.1rem);margin-bottom:.6rem}
+.panel-exito p{max-width:52ch}
+.marca-exito{
+  display:grid;place-items:center;
+  width:52px;height:52px;margin:0 0 1.5rem;
+  background:var(--oro);color:var(--negro);
+  border-radius:50%;font-size:1.5rem;font-weight:700;
+}
+
+
+/* ---------- 08 · PIE ---------- */
+
+.pie{
+  background:var(--negro);
+  border-top:1px solid var(--linea-osc);
+  padding-block:clamp(2.6rem,5vw,4rem) 2rem;
+}
+.pie-fila{
+  display:grid;gap:2.2rem;
+  padding-bottom:2.2rem;
+  border-bottom:1px solid var(--linea-osc);
+}
+.marca-pie{width:150px;height:auto;margin-bottom:1rem}
+.quien{margin:0;font-size:.9rem;color:#8E8A83;max-width:32ch}
+
+.contacto{display:grid;gap:.55rem;align-content:start}
+.contacto p{margin:0;display:flex;flex-wrap:wrap;gap:.6rem;font-size:.92rem}
+.contacto span{
+  min-width:6.4rem;
+  font-size:.7rem;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--oro);
+  align-self:center;
+}
+.contacto a{color:var(--sobre-osc);text-decoration:none}
+.contacto a:hover{color:var(--oro-claro);text-decoration:underline}
+
+.pie-legal{
+  display:flex;flex-wrap:wrap;gap:.5rem 2rem;
+  justify-content:space-between;
+  padding-top:1.8rem;
+}
+.pie-legal p{margin:0;font-size:.8rem;color:#6E6A64;max-width:none}
+.pie-legal b{color:#918C85;font-weight:600}
+
+
+/* ---------- 09 · MOVIMIENTO Y FOCO ---------- */
+
+/* La aparición progresiva la dispara app.js agregando .visible.
+   Sin JS o sin IntersectionObserver, el contenido ya está visible:
+   nunca se esconde información detrás de una animación. */
+.aparece{
+  opacity:0;transform:translateY(14px);
+  transition:opacity .7s var(--curva),transform .7s var(--curva);
+}
+.aparece.visible{opacity:1;transform:none}
+
+/* Foco siempre visible para quien navega con teclado. */
+:focus-visible{
+  outline:2px solid var(--oro-claro);
+  outline-offset:3px;
+  border-radius:2px;
+}
+.franja.clara :focus-visible{outline-color:var(--oro-osc)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .aparece{opacity:1;transform:none}
+  .boton:hover{transform:none}
+}
+
+
+/* ---------- 10 · PANTALLAS MÁS GRANDES ---------- */
+
+@media (min-width:640px){
+  .datos{grid-template-columns:repeat(4,1fr)}
+  .analisis li{grid-template-columns:auto 1fr;padding-block:2.1rem}
+}
+
+@media (min-width:1000px){
+  /* El formulario en dos columnas: el encabezado se queda a la izquierda
+     mientras se completa, así el motivo de la solicitud no se pierde de
+     vista al llegar al final de los campos. */
+  #solicitud .ancho{
+    display:grid;
+    grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+    gap:clamp(3rem,5vw,5.5rem);
+    align-items:start;
+  }
+  .form-cabeza{position:sticky;top:2.5rem;margin-bottom:0}
+  .formulario,.panel-exito{grid-column:2;grid-row:1}
+  .formulario,.panel-exito{max-width:none}
+  .franja .form-cabeza p{max-width:38ch}
+}
+
+@media (min-width:900px){
+  .pie-fila{grid-template-columns:1fr auto;gap:3rem;align-items:start}
+  .contacto{min-width:320px}
+
+  .hero{padding-block:clamp(5rem,10vw,9rem) clamp(5rem,8vw,7.5rem)}
+  .analisis li{
+    grid-template-columns:auto minmax(0,22ch) 1fr;
+    gap:.2rem 2.4rem;
+    align-items:baseline;
+  }
+  .analisis .num{grid-row:auto}
+  .analisis h3{grid-column:2;margin:0}
+  .analisis p{grid-column:3;max-width:none}
+}
+
+
+/* ---------- 11 · IMPRESIÓN ---------- */
+
+@media print{
+  .aparece{opacity:1 !important;transform:none !important}
+  .cabecera,.hero .halo,.subida,.accion,.pie{display:none}
+  body{background:#fff;color:#000}
+  .franja,.franja.clara{background:#fff;padding-block:1rem}
+  h1,h2,h3,.declaracion{color:#000}
+  a{color:#000;text-decoration:none}
+}
