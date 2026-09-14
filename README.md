@@ -108,8 +108,10 @@ https://ghostdz741.github.io/antes-de-invertir/
 Esa es la dirección pública. El primer despliegue puede tardar unos
 minutos más; si ves un 404, esperá y recargá.
 
-**7. Pegarla en la configuración.** Abrí `js/config.js`, poné esa misma
-dirección en `SITIO_URL` y subila de nuevo:
+**7. Pegarla en la configuración.** Abrí `js/config.js` y poné esa misma
+dirección en `SITIO_URL`, para que la página declare `canonical` y
+`og:url` en lugar de no decir nada. Ya está puesta; si el sitio cambia de
+dirección, se cambia acá y se sube.
 
 ```js
 SITIO_URL: "https://ghostdz741.github.io/antes-de-invertir/",
@@ -266,10 +268,10 @@ datos legales**, y que por eso no se inventó. Son tres líneas.
 
 | Dónde | Qué | Estado |
 |---|---|---|
-| `js/config.js` → `FORM_ENDPOINT` | La URL del servicio que recibe las solicitudes | **Vacío.** Hasta que se complete, el formulario avisa en pantalla que está en modo de prueba y no envía nada. Ver sección 4. |
-| `js/config.js` → `SITIO_URL` | La dirección pública del sitio | **Vacío.** Mientras lo esté, la página no declara ninguna dirección en lugar de declarar una inventada. Ver sección 3, paso 7. |
+| `js/config.js` → `FORM_ENDPOINT` | La URL del servicio que recibe las solicitudes | **Vacío — es lo único que falta para que el formulario funcione.** Hasta que se complete, el formulario avisa en pantalla que está en modo de prueba y no envía nada. Ver sección 4. |
 | `js/config.js` → `CONTACTO.WHATSAPP` | El WhatsApp de ALM | **Vacío.** Mientras lo esté, esa fila no se muestra en el pie. Se completa con el número completo, sólo dígitos: `"5493704123456"`. |
-| `../libro/sistema/maquetar.py` → `URL_DIAGNOSTICO` | La dirección que se imprime y se graba en el QR del libro | Puesta en `https://ghostdz741.github.io/antes-de-invertir/` **como suposición**. Confirmala o cambiala antes de imprimir: una vez impreso, el QR no se corrige. |
+| `js/config.js` → `SITIO_URL` | La dirección pública del sitio | ✅ Puesta: `https://ghostdz741.github.io/antes-de-invertir/` |
+| `../libro/sistema/maquetar.py` → `URL_DIAGNOSTICO` | La dirección que se imprime y se graba en el QR del libro | ✅ Confirmada por el autor y verificada contra el sitio publicado. Si el sitio se muda, se cambia ahí y se rehace el PDF: el QR no se corrige después de imprimir. |
 
 Los logos, el email (`babouabd23@gmail.com`) y las redes
 (Instagram `@almarktg`, Facebook `almarktg`) no son placeholders: son los
