@@ -29,7 +29,7 @@ window.ALM_CONFIG = {
      valida los campos y comprime las fotos, pero no envía nada, y
      lo avisa en pantalla para que nadie crea que envió.
   */
-  FORM_ENDPOINT: "",
+  FORM_ENDPOINT: "https://script.google.com/macros/s/AKfycbwnHb7dMv8VKiBzOnJBnQIZ7vpR_MBog0oLa7SQrHpNzm4wD-kUCNKp4WFCu4FKGOQ/exec",
 
   /* ----------------------------------------------------------
      2 · DIRECCIÓN PÚBLICA DEL SITIO

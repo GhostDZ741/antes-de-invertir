@@ -509,6 +509,23 @@
         if (respuesta && respuesta.ok === false) {
           throw new Error(respuesta.error || 'rechazado');
         }
+
+        // El servicio contesta siempre un JSON: está comprobado contra el
+        // endpoint real, incluso en los casos de error. Si lo que volvió
+        // no se puede leer, no sabemos si la solicitud llegó. Decir
+        // "recibida" sería afirmar algo que no comprobamos —y el lector
+        // se quedaría esperando una respuesta que no va a venir—; decir
+        // "falló" lo haría mandarla otra vez y llegarían dos. Se dice lo
+        // que pasa, y se le da a dónde escribir.
+        if (!respuesta) {
+          marcarEnviando(false);
+          avisar('Tu solicitud salió, pero no pudimos confirmar que haya ' +
+                 'llegado. Escribinos a ' +
+                 ((CFG.CONTACTO || {}).EMAIL || 'nuestro email') +
+                 ' para asegurarte de que la recibimos.', 'error');
+          return;
+        }
+
         exito();
       })
       .catch(function (err) {
