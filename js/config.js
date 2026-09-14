@@ -47,7 +47,7 @@ window.ALM_CONFIG = {
      Cuando alm.com.ar vuelva a estar activo, se cambia sólo esta
      línea: no hay que tocar ni el HTML ni el CSS.
   */
-  SITIO_URL: "",
+  SITIO_URL: "https://ghostdz741.github.io/antes-de-invertir/",
 
   /* ----------------------------------------------------------
      3 · LÍMITES DE LAS FOTOS DEL DIAGNÓSTICO
